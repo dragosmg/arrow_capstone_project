@@ -6,11 +6,16 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of arrow_capstone_project is to …
-
-## Summary
-
-improve user and developer experience,
+Implementing the changes below would considerably improve user and
+developer experience. They will remove ambiguity when calling a binding
+(by allowing users to use the `pkg::` prefix), they will make it easier
+to figure out what is going on when things go wrong (by adding a way to
+inspect the Arrow query being generated in a dplyr pipeline, and by
+allowing more granular condition handling/ messaging). Moreover, user
+will be able to include their own functions, operating on Arrow data, in
+a dplyr pipeline. Users will also have access to a minimal documentation
+for each binding, point to the function the binding is emulating and
+highlighting possible differences.
 
 by: allowing them to use namespacing, supply their own function, access
 documentation for existing bindings, improved error messaging.
@@ -26,9 +31,8 @@ Jira tickets:
 -   **Steps**:
     -   Register each binding twice in the `nse_funcs` function registry
         (once as `fun()` and once as `pkg::fun()`).
-    -   There are still some edge cases that need to be sorted, such as
-        some of the unary functions (which are defined as a list which
-        is used for several purposes)
+    -   Sort out edge, e.g for some of the unary functions (which are
+        defined as a list which is used for several purposes)
 -   **Estimated time**: 3-4 days
 -   **Definition of done**:
     -   users being able to correctly use a namespaced version of *all*
