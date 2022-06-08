@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-Implementing the changes below would considerably improve user and developer experience. They will remove ambiguity when calling a binding (by allowing users to use the `pkg::` prefix), they will make it easier to figure out what is going on when things go wrong (by adding a way to inspect the Arrow query being generated in a dplyr pipeline, and by allowing more granular condition handling/ messaging). Moreover, user will be able to include their own functions, operating on Arrow data, in a dplyr pipeline. Users will also have access to a minimal documentation for each binding, point to the function the binding is emulating and highlighting possible differences. 
+Implementing the changes below would considerably improve user and developer experience. They will remove ambiguity when calling a binding (by allowing users to use the `pkg::` prefix), they will make it easier to figure out what is going on when things go wrong (by adding a way to inspect the Arrow query being generated in a dplyr pipeline, and by allowing more granular condition handling/ messaging). Moreover, user will be able to include their own functions (using regular R syntax), operating on Arrow data, in a dplyr pipeline. Users will also have access to a minimal documentation for each binding, point to the function the binding is emulating and highlighting possible differences. 
 
 # Core
 
@@ -57,14 +57,14 @@ nycflights13::flights %>%
 
 ## Allow users to `arrow_eval` a function
   * Jira: [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
+  * users would be able to define their functions using regular R syntax, and, as long as a direct translation of the internals is possible with existing bindings, they would be able to use them in a dplyr pipeline.
   * there are several possible directions:
     * will users need to register their own functions or would this be done automatically?
     * when does the registration take place? before or after loading arrow - maybe use `setHook()` to register function before attaching {arrow}
     * could we make use of {rlang}'s top and bottom of data mask?
+    * investigate if `rlang::inject()` could be used here
   * **Steps**: 
     * Translate the user-defined function with the help of bindings
-      * Give users access to existing bindings
-      * Translate user defined functions with the help of the existing bindings
     * A second step might be accessing / registering these functions
       * Where is the function? Global environment, other script that is being sourced or a package
       * If registering is required, order of namespace loading / attaching might be important

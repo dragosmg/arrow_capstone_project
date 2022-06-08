@@ -38,10 +38,10 @@ developer experience. They will remove ambiguity when calling a binding
 to figure out what is going on when things go wrong (by adding a way to
 inspect the Arrow query being generated in a dplyr pipeline, and by
 allowing more granular condition handling/ messaging). Moreover, user
-will be able to include their own functions, operating on Arrow data, in
-a dplyr pipeline. Users will also have access to a minimal documentation
-for each binding, point to the function the binding is emulating and
-highlighting possible differences.
+will be able to include their own functions (using regular R syntax),
+operating on Arrow data, in a dplyr pipeline. Users will also have
+access to a minimal documentation for each binding, point to the
+function the binding is emulating and highlighting possible differences.
 
 # 2 Core
 
@@ -94,6 +94,10 @@ highlighting possible differences.
 
 -   Jira:
     [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
+-   users would be able to define their functions using regular R
+    syntax, and, as long as a direct translation of the internals is
+    possible with existing bindings, they would be able to use them in a
+    dplyr pipeline.
 -   there are several possible directions:
     -   will users need to register their own functions or would this be
         done automatically?
@@ -101,11 +105,9 @@ highlighting possible differences.
         arrow - maybe use `setHook()` to register function before
         attaching {arrow}
     -   could we make use of {rlang}’s top and bottom of data mask?
+    -   investigate if `rlang::inject()` could be used here
 -   **Steps**:
     -   Translate the user-defined function with the help of bindings
-        -   Give users access to existing bindings
-        -   Translate user defined functions with the help of the
-            existing bindings
     -   A second step might be accessing / registering these functions
         -   Where is the function? Global environment, other script that
             is being sourced or a package
