@@ -47,7 +47,10 @@ highlighting possible differences.
 
 -   Jira:
     [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
--   might enable 3
+-   users will be able to use either the function name (`fun`) or the
+    namespace-qualified (`pkg::fun`) when calling an Arrow bindings
+-   when defining a binding we should be using the `pkg::fun` notation
+-   **Linked to**: 2.3
 -   **Steps**:
     -   Register each binding twice in the `nse_funcs` function registry
         (once as `fun()` and once as `pkg::fun()`).
@@ -66,7 +69,7 @@ highlighting possible differences.
       collect()
     ```
 
-    -   or being able to use the {lubridate} version of `date()` in the
+    -   and being able to use the {lubridate} version of `date()` in the
         snippet below:
 
 ``` r
@@ -81,11 +84,19 @@ highlighting possible differences.
     collect()
 ```
 
+    * document (where?) that going forward we should be using `pkg::fun` when defining a binding, which will register 2 copies of the same binding.
+
 ## 2.2 Allow users to `arrow_eval` a function
 
 -   Jira:
     [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
 -   there are several possible directions:
+    -   will users need to register their own functions or would this be
+        done automatically?
+    -   when does the registration take place? before or after loading
+        arrow - maybe use `setHook()` to register function before
+        attaching {arrow}
+    -   could we make use of {rlang}’s top and bottom of data mask?
 -   **Steps**:
     -   Translate the user-defined function with the help of bindings
         -   Give users access to existing bindings
@@ -118,15 +129,15 @@ tibble::tibble(my_string = "1234") %>%
 -   Jira:
     [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011)
 -   Likely depends on ticket 1 (removing any ambiguity with regards to
-    the function we’re binding to)
+    the function we’re emulating)
 -   This will allow us to document differences in behaviours,
     unsupported arguments, etc.
--   I think this could be really useful for users. How would the access
+-   I think this could be really useful for users. How would they access
     said documentation?
--   As a stretch we might include the version of the function we’re
-    binding to. Functions / packages are not static and convergence
-    between the original function and the arrow binding might drift over
-    time.
+-   As a stretch we might include the package version of the function
+    we’re linking to. Functions / packages are not static and
+    convergence between the original function and the arrow binding
+    might drift over time.
 -   **Steps**:
     -   create a (manual) prototype of what a documented binding would
         look like
@@ -151,9 +162,9 @@ tibble::tibble(my_string = "1234") %>%
 -   At present we rely on the `"not supported.*Arrow"` incantation to
     identify an `arrow-try-error`, which implies that error messages
     that depart from this are not surfaced and the users never see them.
--   Maybe expand the scope to include more precise messaging, in cases
-    where a part of a more complex call fails to pinpoint to the exact
-    location / reason for the failure.
+-   Maybe expand the scope of this issue / ticket to include more
+    precise messaging, in cases where a part of a more complex call
+    fails to pinpoint to the exact location / reason for the failure.
 -   Components:
     -   we could opt for custom error messages when an argument is not
         supported, for example
@@ -161,7 +172,7 @@ tibble::tibble(my_string = "1234") %>%
         binding and the original function (e.g. different default
         values, slight differences in implementation, etc.)
 -   **Steps**:
-    -   extend the classes of Arrow errors
+    -   expand the classification of Arrow errors
     -   update the behaviour: allow the printing of error messages when
         they do not contain `"not supported.*Arrow"`
 -   **Estimated duration**: 1-2 weeks

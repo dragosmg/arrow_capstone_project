@@ -24,9 +24,11 @@ Implementing the changes below would considerably improve user and developer exp
 
 ## Allow bindings to use the `pkg::` prefixes
   * Jira: [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
-  - might enable 3
+  - users will be able to use either the function name (`fun`) or the namespace-qualified (`pkg::fun`) when calling an Arrow bindings
+  - when defining a binding we should be using the `pkg::fun` notation
+  - **Linked to**: 2.3
   - **Steps**:
-    * Register each binding twice in the `nse_funcs` function registry (once as `fun()` and once as `pkg::fun()`). 
+    * Register each binding twice in the `nse_funcs` function registry (once as `fun()` and once as `pkg::fun()`).
     * Sort out edge, e.g for some of the unary functions (which are defined as a list which is used for several purposes)
   - **Estimated time**: 3-4 days
   - **Definition of done**: 
@@ -37,7 +39,7 @@ nycflights13::flights %>%
   mutate(year = lubridate::year(time_hour)) %>% 
   collect()
 ```
-    * or being able to use the {lubridate} version of `date()` in the snippet below:
+    * and being able to use the {lubridate} version of `date()` in the snippet below:
 
 ```r
   test_df <- tibble(
@@ -50,10 +52,14 @@ nycflights13::flights %>%
     mutate(a_date = lubridate::date(posixct_date)) %>%
     collect()
 ```
+    * document (where?) that going forward we should be using `pkg::fun` when defining a binding, which will register 2 copies of the same binding.
 
 ## Allow users to `arrow_eval` a function
   * Jira: [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
   * there are several possible directions:
+    * will users need to register their own functions or would this be done automatically?
+    * when does the registration take place? before or after loading arrow - maybe use `setHook()` to register function before attaching {arrow}
+    * could we make use of {rlang}'s top and bottom of data mask?
   * **Steps**: 
     * Translate the user-defined function with the help of bindings
       * Give users access to existing bindings
@@ -75,10 +81,10 @@ tibble::tibble(my_string = "1234") %>%
 
 ## Document a binding (semi) automatically
   * Jira: [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011)
-  * Likely depends on ticket 1 (removing any ambiguity with regards to the function we're binding to)
+  * Likely depends on ticket 1 (removing any ambiguity with regards to the function we're emulating)
   * This will allow us to document differences in behaviours, unsupported arguments, etc.
-  * I think this could be really useful for users. How would the access said documentation?
-  * As a stretch we might include the version of the function we're binding to. Functions / packages are not static and convergence between the original function and the arrow binding might drift over time.
+  * I think this could be really useful for users. How would they access said documentation?
+  * As a stretch we might include the package version of the function we're linking to. Functions / packages are not static and convergence between the original function and the arrow binding might drift over time.
   * **Steps**:
     * create a (manual) prototype of what a documented binding would look like
     * generate a skeleton / minimal documentation automatically
@@ -96,12 +102,12 @@ tibble::tibble(my_string = "1234") %>%
   * Jira: [ARROW-13370](https://issues.apache.org/jira/browse/ARROW-13370)
   * This is related to, but not dependent on 3.
   * At present we rely on the `"not supported.*Arrow"` incantation to identify an `arrow-try-error`, which implies that error messages that depart from this are not surfaced and the users never see them.
-  * Maybe expand the scope to include more precise messaging, in cases where a part of a more complex call fails to pinpoint to the exact location / reason for the failure. 
+  * Maybe expand the scope of this issue / ticket to include more precise messaging, in cases where a part of a more complex call fails to pinpoint to the exact location / reason for the failure. 
   * Components: 
     * we could opt for custom error messages when an argument is not supported, for example
     * we could also warn when there is a difference between the binding and the original function (e.g. different default values, slight differences in implementation, etc.)
   * **Steps**:
-    * extend the classes of Arrow errors
+    * expand the classification of Arrow errors
     * update the behaviour: allow the printing of error messages when they do not contain `"not supported.*Arrow"`
   * **Estimated duration**: 1-2 weeks
   * **Definition of done**: messages other than `"not supported.*Arrow"` are classified as `arrow-try-error` (or a different, related class) and surfaced to inform the user
