@@ -7,8 +7,8 @@
         function](#22-allow-users-to-arrow_eval-a-function)
     -   [2.3 Document a binding (semi)
         automatically](#23-document-a-binding-semi-automatically)
-    -   [2.4 More granular / specific handling for known errors in
-        `arrow_eval`](#24-more-granular--specific-handling-for-known-errors-in-arrow_eval)
+    -   [2.4 More specific handling for known errors in
+        `arrow_eval`](#24-more-specific-handling-for-known-errors-in-arrow_eval)
     -   [2.5 Allow users to inspect ExecPlans (`show_query()` for
         `arrow_dplyr_query`)](#25-allow-users-to-inspect-execplans-show_query-for-arrow_dplyr_query)
     -   [2.6 Work around masking of data type
@@ -22,6 +22,8 @@
     -   [3.2 Guard `build_expr` against non-expression inputs longer
         than
         1](#32-guard-build_expr-against-non-expression-inputs-longer-than-1)
+    -   [3.3 Throw helpful errors on bad object types in dplyr
+        expressions](#33-throw-helpful-errors-on-bad-object-types-in-dplyr-expressions)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -157,7 +159,7 @@ tibble::tibble(my_string = "1234") %>%
 -   **Definition of done**: bindings can be documented based on the
     function they emulate
 
-## 2.4 More granular / specific handling for known errors in `arrow_eval`
+## 2.4 More specific handling for known errors in `arrow_eval`
 
 -   Jira:
     [ARROW-13370](https://issues.apache.org/jira/browse/ARROW-13370)
@@ -307,3 +309,10 @@ nycflights13::flights %>%
     `vec_size() == 1L`
 -   This is a bit of an extra ticket, not strictly related to the ones
     above.
+
+## 3.3 Throw helpful errors on bad object types in dplyr expressions
+
+-   Jira:
+    [ARROW-12093](https://issues.apache.org/jira/browse/ARROW-12093)
+-   related to [More specific handling for known errors in
+    `arrow_eval`](#24-more-specific-handling-for-known-errors-in-arrow_eval)
