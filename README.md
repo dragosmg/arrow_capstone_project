@@ -202,7 +202,21 @@ nycflights13::flights %>%
 
 ## 2.6 Work around masking of data type functions
 
--   [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322):
+-   Jira:
+    [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322)
+-   several data type functions in the arrow package are named very
+    generically, so they represent a large area for potential masking
+    problems.
+-   this would need to handle the following scenarios:
+    -   `type` is a variable in the calling environment whose value is a
+        `DataType` object
+    -   `type` is a call to a function defined by the user that returns
+        a `DataType` object
+    -   `type` is any arbitrary R expression that the user has wired up
+        to return a `DataType` object
+    -   `type` is a call to a function in another package or in the
+        user’s environment that masks the Arrow type function of the
+        same name
 -   **Steps**
 -   **Definition of done**
 
