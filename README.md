@@ -1,5 +1,5 @@
 
--   [1 Capstone project proposal](#1-capstone-project-proposal)
+-   [1 Apache Arrow capstone project](#1-apache-arrow-capstone-project)
 -   [2 Core](#2-core)
     -   [2.1 Allow bindings to use the `pkg::`
         prefixes](#21-allow-bindings-to-use-the-pkg-prefixes)
@@ -16,7 +16,7 @@
     -   [2.7 Document all of the above in user / developer facing
         documentation](#27-document-all-of-the-above-in-user--developer-facing-documentation)
     -   [2.8 Write a blog post](#28-write-a-blog-post)
--   [3 Extension](#3-extension)
+-   [3 Stretch goals](#3-stretch-goals)
     -   [3.1 Allow users to explore existing
         bindings](#31-allow-users-to-explore-existing-bindings)
     -   [3.2 Guard `build_expr` against non-expression inputs longer
@@ -27,7 +27,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# 1 Capstone project proposal
+# 1 Apache Arrow capstone project
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -291,7 +291,7 @@ nycflights13::flights %>%
 
 ## 2.8 Write a blog post
 
-# 3 Extension
+# 3 Stretch goals
 
 ## 3.1 Allow users to explore existing bindings
 

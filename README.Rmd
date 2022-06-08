@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Capstone project proposal
+# Apache Arrow capstone project
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -200,7 +200,7 @@ nycflights13::flights %>%
 
 ## Write a blog post
 
-# Extension
+# Stretch goals
 
 ## Allow users to explore existing bindings 
   * and the differences between them and the functions they aim to replace
