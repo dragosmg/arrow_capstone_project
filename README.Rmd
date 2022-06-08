@@ -1,5 +1,8 @@
 ---
-output: github_document
+output: 
+  github_document:
+    toc: true
+    number_sections: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -17,11 +20,10 @@ knitr::opts_chunk$set(
 
 Implementing the changes below would considerably improve user and developer experience. They will remove ambiguity when calling a binding (by allowing users to use the `pkg::` prefix), they will make it easier to figure out what is going on when things go wrong (by adding a way to inspect the Arrow query being generated in a dplyr pipeline, and by allowing more granular condition handling/ messaging). Moreover, user will be able to include their own functions, operating on Arrow data, in a dplyr pipeline. Users will also have access to a minimal documentation for each binding, point to the function the binding is emulating and highlighting possible differences. 
 
-## Scope
+# Core
 
-Jira tickets:
-
-1. Allow bindings to use the `pkg::` prefixes: [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
+## Allow bindings to use the `pkg::` prefixes
+  * Jira: [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
   - might enable 3
   - **Steps**:
     * Register each binding twice in the `nse_funcs` function registry (once as `fun()` and once as `pkg::fun()`). 
@@ -49,7 +51,8 @@ nycflights13::flights %>%
     collect()
 ```
 
-2. Allow users to `arrow_eval` a function: [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
+## Allow users to `arrow_eval` a function
+  * Jira: [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
   * there are several possible directions:
   * **Steps**: 
     * Translate the user-defined function with the help of bindings
@@ -70,7 +73,8 @@ tibble::tibble(my_string = "1234") %>%
   collect()
 ```
 
-3. [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011): (semi) automatically document a binding
+## Document a binding (semi) automatically
+  * Jira: [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011)
   * Likely depends on ticket 1 (removing any ambiguity with regards to the function we're binding to)
   * This will allow us to document differences in behaviours, unsupported arguments, etc.
   * I think this could be really useful for users. How would the access said documentation?
@@ -85,7 +89,7 @@ tibble::tibble(my_string = "1234") %>%
   * **Definition of done**: bindings are documented based on the function they emulate.
 
 
-4. [ARROW-13370](https://issues.apache.org/jira/browse/ARROW-13370): more special handling for known errors in `arrow_eval`
+## [ARROW-13370](https://issues.apache.org/jira/browse/ARROW-13370): more special handling for known errors in `arrow_eval`
   * This is related to, but not dependent on 3.
   * At present we rely on the `"not supported.*Arrow"` incantation to identify an `arrow-try-error`, which implies that error messages that depart from this are not surfaced and the users never see them.
   * Maybe expand the scope to include more precise messaging, in cases where a part of a more complex call fails to pinpoint to the exact location / reason for the failure. 
@@ -98,7 +102,8 @@ tibble::tibble(my_string = "1234") %>%
   * **Estimated duration**: 1-2 weeks
   * **Definition of done**: messages other than `"not supported.*Arrow"` are classified as `arrow-try-error` (or a different, related class) and surfaced to inform the user
 
-5. [ARROW-15016](https://issues.apache.org/jira/browse/ARROW-15016): `show_query()` for `arrow_dplyr_query`
+## Allow users to inspect ExecPlans (`show_query()` for `arrow_dplyr_query`)
+  * Jira: [ARROW-15016](https://issues.apache.org/jira/browse/ARROW-15016): 
   * this would be useful for debugging / allowing users to inspect a query plan 
   * **Steps**
     * implement `$ToString` / `print()` methods for ExecPlan
@@ -112,19 +117,23 @@ nycflights13::flights %>%
   show_arrow_query()
 ```
 
-6. [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322): work around masking of data type functions
+## Work around masking of data type functions 
+  * [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322): 
   * **Steps**
   * **Definition of done**
 
-## Extension
+# Extension
 
-7. Allow users to explore existing bindings and the differences between them and the functions they aim to replace
+## Allow users to explore existing bindings 
+  * and the differences between them and the functions they aim to replace
   * no Jira ticket yet
   * I'm thinking of an interface, maybe shiny that allows a use to see , for example, what lubridate functionality is currently supported in Arrow and maybe explore the differences between the `fun` binding and `lubridate::fun`.
 
-8. [ARROW-14855](https://issues.apache.org/jira/browse/ARROW-14855): `build_expr()` should check that non-expression inputs have `vec_size() == 1L`
+## Guard `build_expr` against non-expression inputs longer than 1
+  * Jira: [ARROW-14855](https://issues.apache.org/jira/browse/ARROW-14855)
+  * `build_expr()` should check that non-expression inputs have `vec_size() == 1L`
   * This is a bit of an extra ticket, not strictly related to the ones above. 
   
-9. Document all of the above in user / developer facing documentation. 
+## Document all of the above in user / developer facing documentation. 
 
-10. Write a blog post.
+## Write a blog post.
