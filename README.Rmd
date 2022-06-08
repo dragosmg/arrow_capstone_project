@@ -138,6 +138,10 @@ nycflights13::flights %>%
   * **Steps**
   * **Definition of done**
 
+## Document all of the above in user / developer facing documentation
+
+## Write a blog post
+
 # Extension
 
 ## Allow users to explore existing bindings 
@@ -150,6 +154,4 @@ nycflights13::flights %>%
   * `build_expr()` should check that non-expression inputs have `vec_size() == 1L`
   * This is a bit of an extra ticket, not strictly related to the ones above. 
   
-## Document all of the above in user / developer facing documentation. 
 
-## Write a blog post.

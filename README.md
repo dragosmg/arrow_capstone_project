@@ -13,15 +13,15 @@
         `arrow_dplyr_query`)](#25-allow-users-to-inspect-execplans-show_query-for-arrow_dplyr_query)
     -   [2.6 Work around masking of data type
         functions](#26-work-around-masking-of-data-type-functions)
+    -   [2.7 Document all of the above in user / developer facing
+        documentation](#27-document-all-of-the-above-in-user--developer-facing-documentation)
+    -   [2.8 Write a blog post](#28-write-a-blog-post)
 -   [3 Extension](#3-extension)
     -   [3.1 Allow users to explore existing
         bindings](#31-allow-users-to-explore-existing-bindings)
     -   [3.2 Guard `build_expr` against non-expression inputs longer
         than
         1](#32-guard-build_expr-against-non-expression-inputs-longer-than-1)
-    -   [3.3 Document all of the above in user / developer facing
-        documentation.](#33-document-all-of-the-above-in-user--developer-facing-documentation)
-    -   [3.4 Write a blog post.](#34-write-a-blog-post)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -220,6 +220,10 @@ nycflights13::flights %>%
 -   **Steps**
 -   **Definition of done**
 
+## 2.7 Document all of the above in user / developer facing documentation
+
+## 2.8 Write a blog post
+
 # 3 Extension
 
 ## 3.1 Allow users to explore existing bindings
@@ -240,7 +244,3 @@ nycflights13::flights %>%
     `vec_size() == 1L`
 -   This is a bit of an extra ticket, not strictly related to the ones
     above.
-
-## 3.3 Document all of the above in user / developer facing documentation.
-
-## 3.4 Write a blog post.
