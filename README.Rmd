@@ -222,3 +222,6 @@ I haven't detailed these, as that could be done depending on the progress of the
   * Jira: [ARROW-12093](https://issues.apache.org/jira/browse/ARROW-12093)
   * related to [More specific handling for known errors in `arrow_eval`]
 
+## Implement user-defined scalar functions in R bindings
+  * Jira: [ARROW-16444](https://issues.apache.org/jira/projects/ARROW/issues/ARROW-16444)
+  * related to [Allow users to `arrow_eval` a function]

@@ -24,6 +24,8 @@
         1](#32-guard-build_expr-against-non-expression-inputs-longer-than-1)
     -   [3.3 Throw helpful errors on bad object types in dplyr
         expressions](#33-throw-helpful-errors-on-bad-object-types-in-dplyr-expressions)
+    -   [3.4 Implement user-defined scalar functions in R
+        bindings](#34-implement-user-defined-scalar-functions-in-r-bindings)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -325,3 +327,10 @@ progress of the work on the *core* tickets.
     [ARROW-12093](https://issues.apache.org/jira/browse/ARROW-12093)
 -   related to [More specific handling for known errors in
     `arrow_eval`](#24-more-specific-handling-for-known-errors-in-arrow_eval)
+
+## 3.4 Implement user-defined scalar functions in R bindings
+
+-   Jira:
+    [ARROW-16444](https://issues.apache.org/jira/projects/ARROW/issues/ARROW-16444)
+-   related to [Allow users to `arrow_eval` a
+    function](#22-allow-users-to-arrow_eval-a-function)
