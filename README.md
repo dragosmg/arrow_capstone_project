@@ -11,17 +11,17 @@
         `arrow_eval`](#24-more-granular--specific-handling-for-known-errors-in-arrow_eval)
     -   [2.5 Allow users to inspect ExecPlans (`show_query()` for
         `arrow_dplyr_query`)](#25-allow-users-to-inspect-execplans-show_query-for-arrow_dplyr_query)
-    -   [2.6 Work around masking of data type
-        functions](#26-work-around-masking-of-data-type-functions)
-    -   [2.7 Document all of the above in user / developer facing
-        documentation](#27-document-all-of-the-above-in-user--developer-facing-documentation)
-    -   [2.8 Write a blog post](#28-write-a-blog-post)
+    -   [2.6 Document all of the above in user / developer facing
+        documentation](#26-document-all-of-the-above-in-user--developer-facing-documentation)
+    -   [2.7 Write a blog post](#27-write-a-blog-post)
 -   [3 Extension](#3-extension)
-    -   [3.1 Allow users to explore existing
-        bindings](#31-allow-users-to-explore-existing-bindings)
-    -   [3.2 Guard `build_expr` against non-expression inputs longer
+    -   [3.1 Work around masking of data type
+        functions](#31-work-around-masking-of-data-type-functions)
+    -   [3.2 Allow users to explore existing
+        bindings](#32-allow-users-to-explore-existing-bindings)
+    -   [3.3 Guard `build_expr` against non-expression inputs longer
         than
-        1](#32-guard-build_expr-against-non-expression-inputs-longer-than-1)
+        1](#33-guard-build_expr-against-non-expression-inputs-longer-than-1)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -200,13 +200,21 @@ nycflights13::flights %>%
   show_arrow_query()
 ```
 
-## 2.6 Work around masking of data type functions
+## 2.6 Document all of the above in user / developer facing documentation
+
+## 2.7 Write a blog post
+
+# 3 Extension
+
+## 3.1 Work around masking of data type functions
 
 -   Jira:
     [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322)
+
 -   several data type functions in the arrow package are named very
     generically, so they represent a large area for potential masking
     problems.
+
 -   this would need to handle the following scenarios:
     -   `type` is a variable in the calling environment whose value is a
         `DataType` object
@@ -217,16 +225,12 @@ nycflights13::flights %>%
     -   `type` is a call to a function in another package or in the
         user’s environment that masks the Arrow type function of the
         same name
--   **Steps**
--   **Definition of done**
 
-## 2.7 Document all of the above in user / developer facing documentation
+-   ## 0.1 **Steps**:
 
-## 2.8 Write a blog post
+-   **Definition of done**:
 
-# 3 Extension
-
-## 3.1 Allow users to explore existing bindings
+## 3.2 Allow users to explore existing bindings
 
 -   and the differences between them and the functions they aim to
     replace
@@ -236,7 +240,7 @@ nycflights13::flights %>%
     Arrow and maybe explore the differences between the `fun` binding
     and `lubridate::fun`.
 
-## 3.2 Guard `build_expr` against non-expression inputs longer than 1
+## 3.3 Guard `build_expr` against non-expression inputs longer than 1
 
 -   Jira:
     [ARROW-14855](https://issues.apache.org/jira/browse/ARROW-14855)

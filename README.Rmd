@@ -54,6 +54,7 @@ nycflights13::flights %>%
 ```
     * document (where?) that going forward we should be using `pkg::fun` when defining a binding, which will register 2 copies of the same binding.
 
+
 ## Allow users to `arrow_eval` a function
   * Jira: [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
   * there are several possible directions:
@@ -78,6 +79,7 @@ tibble::tibble(my_string = "1234") %>%
   mutate(nchar(my_string), nchar2(my_string)) %>%
   collect()
 ```
+
 
 ## Document a binding (semi) automatically
   * Jira: [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011)
@@ -112,6 +114,7 @@ tibble::tibble(my_string = "1234") %>%
   * **Estimated duration**: 1-2 weeks
   * **Definition of done**: messages other than `"not supported.*Arrow"` are classified as `arrow-try-error` (or a different, related class) and surfaced to inform the user
 
+
 ## Allow users to inspect ExecPlans (`show_query()` for `arrow_dplyr_query`)
   * Jira: [ARROW-15016](https://issues.apache.org/jira/browse/ARROW-15016): 
   * this would be useful for debugging / allowing users to inspect a query plan 
@@ -127,6 +130,12 @@ nycflights13::flights %>%
   show_arrow_query()
 ```
 
+## Document all of the above in user / developer facing documentation
+
+## Write a blog post
+
+# Extension
+
 ## Work around masking of data type functions 
   * Jira: [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322)
   * several data type functions in the arrow package are named very generically, so they represent a large area for potential masking problems.
@@ -135,14 +144,9 @@ nycflights13::flights %>%
     * `type` is a call to a function defined by the user that returns a `DataType` object
     * `type` is any arbitrary R expression that the user has wired up to return a `DataType` object
     * `type` is a call to a function in another package or in the user's environment that masks the Arrow type function of the same name
-  * **Steps**
-  * **Definition of done**
-
-## Document all of the above in user / developer facing documentation
-
-## Write a blog post
-
-# Extension
+  * **Steps**:
+    * 
+  * **Definition of done**: 
 
 ## Allow users to explore existing bindings 
   * and the differences between them and the functions they aim to replace
