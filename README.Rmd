@@ -24,7 +24,7 @@ Implementing the changes below would considerably improve user and developer exp
 
 ## Allow bindings to use the `pkg::` prefixes
   * Jira: [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
-  - users will be able to use either the function name (`fun`) or the namespace-qualified (`pkg::fun`) when calling an Arrow bindings
+  - users will be able to use either the function name (`fun`) or the namespace-qualified (`pkg::fun`) version when calling Arrow bindings
   - when defining a binding we should be using the `pkg::fun` notation
   - **Linked to**: [Document a binding (semi) automatically]
   - **Steps**:

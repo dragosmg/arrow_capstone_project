@@ -50,7 +50,7 @@ function the binding is emulating and highlighting possible differences.
 -   Jira:
     [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
 -   users will be able to use either the function name (`fun`) or the
-    namespace-qualified (`pkg::fun`) when calling an Arrow bindings
+    namespace-qualified (`pkg::fun`) version when calling Arrow bindings
 -   when defining a binding we should be using the `pkg::fun` notation
 -   **Linked to**: [Document a binding (semi)
     automatically](#23-document-a-binding-semi-automatically)
