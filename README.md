@@ -96,8 +96,8 @@ function the binding is emulating and highlighting possible differences.
     [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
 -   users would be able to define their functions using regular R
     syntax, and, as long as a direct translation of the internals is
-    possible with existing bindings, they would be able to use them in a
-    dplyr pipeline.
+    possible with existing bindings, they would be able to use them in
+    an {arrow} dplyr pipeline.
 -   there are several possible directions:
     -   will users need to register their own functions or would this be
         done automatically?
@@ -141,7 +141,7 @@ tibble::tibble(my_string = "1234") %>%
     unsupported arguments, etc.
 -   I think this could be really useful for users. How would they access
     said documentation?
--   As a stretch we might include the package version of the function
+-   As a *stretch* we might include the package version of the function
     we’re linking to. Functions / packages are not static and
     convergence between the original function and the arrow binding
     might drift over time.
