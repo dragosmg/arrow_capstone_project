@@ -19,8 +19,8 @@ documentation for existing bindings, improved error messaging.
 
 Jira tickets:
 
-1.  [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575):
-    allow bindings to use the `pkg::` prefixes
+1.  Allow bindings to use the `pkg::` prefixes:
+    [ARROW-14575](https://issues.apache.org/jira/browse/ARROW-14575)
 
 -   might enable 3
 -   **Steps**:
@@ -57,11 +57,10 @@ Jira tickets:
     collect()
 ```
 
-2.  [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071):
-    allow users to `arrow_eval` a function
+2.  Allow users to `arrow_eval` a function:
+    [ARROW-14071](https://issues.apache.org/jira/browse/ARROW-14071)
 
 -   there are several possible directions:
-    -   
 -   **Steps**:
     -   Translate the user-defined function with the help of bindings
         -   Give users access to existing bindings
@@ -119,6 +118,9 @@ tibble::tibble(my_string = "1234") %>%
     more special handling for known errors in `arrow_eval`
 
 -   This is related to, but not dependent on 3.
+-   At present we rely on the `"not supported.*Arrow"` incantation to
+    identify an `arrow-try-error`, which implies that error messages
+    that depart from this are not surfaced and the users never see them.
 -   Maybe expand the scope to include more precise messaging, in cases
     where a part of a more complex call fails to pinpoint to the exact
     location / reason for the failure.
@@ -138,9 +140,18 @@ tibble::tibble(my_string = "1234") %>%
 -   this would be useful for debugging / allowing users to inspect a
     query plan
 -   **Steps**
-    -   implement `$ToString` and `print()` methods for ExecPlan
+    -   implement `$ToString` / `print()` methods for ExecPlan
     -   wire them up to a new function, `show_arrow_query()`
--   **Definition of done**: being able to print / inspect a query plan
+-   **Estimated duration**: 3-4 days
+-   **Definition of done**: being able to print / inspect a query plan.
+    The following snippet of code should work:
+
+``` r
+nycflights13::flights %>% 
+  arrow_table() %>% 
+  filter(year == 2013, month == 5, day == 27) %>% 
+  show_arrow_query()
+```
 
 6.  [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322):
     work around masking of data type functions
