@@ -11,17 +11,17 @@
         `arrow_eval`](#24-more-granular--specific-handling-for-known-errors-in-arrow_eval)
     -   [2.5 Allow users to inspect ExecPlans (`show_query()` for
         `arrow_dplyr_query`)](#25-allow-users-to-inspect-execplans-show_query-for-arrow_dplyr_query)
-    -   [2.6 Document all of the above in user / developer facing
-        documentation](#26-document-all-of-the-above-in-user--developer-facing-documentation)
-    -   [2.7 Write a blog post](#27-write-a-blog-post)
+    -   [2.6 Work around masking of data type
+        functions](#26-work-around-masking-of-data-type-functions)
+    -   [2.7 Document all of the above in user / developer facing
+        documentation](#27-document-all-of-the-above-in-user--developer-facing-documentation)
+    -   [2.8 Write a blog post](#28-write-a-blog-post)
 -   [3 Extension](#3-extension)
-    -   [3.1 Work around masking of data type
-        functions](#31-work-around-masking-of-data-type-functions)
-    -   [3.2 Allow users to explore existing
-        bindings](#32-allow-users-to-explore-existing-bindings)
-    -   [3.3 Guard `build_expr` against non-expression inputs longer
+    -   [3.1 Allow users to explore existing
+        bindings](#31-allow-users-to-explore-existing-bindings)
+    -   [3.2 Guard `build_expr` against non-expression inputs longer
         than
-        1](#33-guard-build_expr-against-non-expression-inputs-longer-than-1)
+        1](#32-guard-build_expr-against-non-expression-inputs-longer-than-1)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -50,12 +50,16 @@ highlighting possible differences.
 -   users will be able to use either the function name (`fun`) or the
     namespace-qualified (`pkg::fun`) when calling an Arrow bindings
 -   when defining a binding we should be using the `pkg::fun` notation
--   **Linked to**: 2.3
+-   **Linked to**: [Document a binding (semi)
+    automatically](#23-document-a-binding-semi-automatically)
 -   **Steps**:
     -   Register each binding twice in the `nse_funcs` function registry
         (once as `fun()` and once as `pkg::fun()`).
     -   Sort out edge, e.g for some of the unary functions (which are
         defined as a list which is used for several purposes)
+    -   document (where?) that going forward we should be using
+        `pkg::fun` when defining a binding, which will register 2 copies
+        of the same binding.
 -   **Estimated time**: 3-4 days
 -   **Definition of done**:
     -   users being able to correctly use a namespaced version of *all*
@@ -83,8 +87,6 @@ highlighting possible differences.
     mutate(a_date = lubridate::date(posixct_date)) %>%
     collect()
 ```
-
-    * document (where?) that going forward we should be using `pkg::fun` when defining a binding, which will register 2 copies of the same binding.
 
 ## 2.2 Allow users to `arrow_eval` a function
 
@@ -128,8 +130,9 @@ tibble::tibble(my_string = "1234") %>%
 
 -   Jira:
     [ARROW-15011](https://issues.apache.org/jira/browse/ARROW-15011)
--   Likely depends on ticket 1 (removing any ambiguity with regards to
-    the function we’re emulating)
+-   Likely depends on [Allow bindings to use the `pkg::`
+    prefixes](#21-allow-bindings-to-use-the-pkg-prefixes) (removing any
+    ambiguity with regards to the function we’re emulating)
 -   This will allow us to document differences in behaviours,
     unsupported arguments, etc.
 -   I think this could be really useful for users. How would they access
@@ -148,8 +151,8 @@ tibble::tibble(my_string = "1234") %>%
     -   **follow-up step**: document all bindings
 -   **Estimated duration**
     -   given the rough documentation on how to define custom roxygen2
-        extensions, I anticipate this will take extra time to understand
-        the roxygen2 source code.
+        extensions, I anticipate this will take extra time due to the
+        need to understand the {roxygen2} source code.
     -   rough estimate: 3-4 weeks
 -   **Definition of done**: bindings can be documented based on the
     function they emulate
@@ -158,7 +161,8 @@ tibble::tibble(my_string = "1234") %>%
 
 -   Jira:
     [ARROW-13370](https://issues.apache.org/jira/browse/ARROW-13370)
--   This is related to, but not dependent on 3.
+-   This is related to, but not dependent on [Document a binding (semi)
+    automatically](#23-document-a-binding-semi-automatically).
 -   At present we rely on the `"not supported.*Arrow"` incantation to
     identify an `arrow-try-error`, which implies that error messages
     that depart from this are not surfaced and the users never see them.
@@ -176,9 +180,34 @@ tibble::tibble(my_string = "1234") %>%
     -   update the behaviour: allow the printing of error messages when
         they do not contain `"not supported.*Arrow"`
 -   **Estimated duration**: 1-2 weeks
--   **Definition of done**: messages other than `"not supported.*Arrow"`
-    are classified as `arrow-try-error` (or a different, related class)
-    and surfaced to inform the user
+-   **Definition of done**: allow more detailed error messages
+    (i.e. messages not containing than `"not supported.*Arrow"` can be
+    classified as `arrow-try-error` (or a different, related class) and
+    surfaced to inform the user).
+
+``` r
+# this error messages surfaces
+register_binding("difftime", function(time1,
+                                      time2,
+                                      tz,
+                                      units = "secs") {
+    if (units != "secs") {
+      abort("`difftime()` with units other than `secs` not supported in Arrow")
+    }
+    ...
+}
+
+# while this one would get lost in the exception handling
+register_binding("difftime", function(time1,
+                                      time2,
+                                      tz,
+                                      units = "secs") {
+    if (units != "secs") {
+      abort("This function errors for units other than `secs`")
+    }
+    ...
+}
+```
 
 ## 2.5 Allow users to inspect ExecPlans (`show_query()` for `arrow_dplyr_query`)
 
@@ -200,21 +229,15 @@ nycflights13::flights %>%
   show_arrow_query()
 ```
 
-## 2.6 Document all of the above in user / developer facing documentation
-
-## 2.7 Write a blog post
-
-# 3 Extension
-
-## 3.1 Work around masking of data type functions
+## 2.6 Work around masking of data type functions
 
 -   Jira:
     [ARROW-12322](https://issues.apache.org/jira/browse/ARROW-12322)
-
 -   several data type functions in the arrow package are named very
     generically, so they represent a large area for potential masking
     problems.
-
+-   should be tackled before [Allow bindings to use the `pkg::`
+    prefixes](#21-allow-bindings-to-use-the-pkg-prefixes)
 -   this would need to handle the following scenarios:
     -   `type` is a variable in the calling environment whose value is a
         `DataType` object
@@ -225,12 +248,48 @@ nycflights13::flights %>%
     -   `type` is a call to a function in another package or in the
         user’s environment that masks the Arrow type function of the
         same name
-
--   ## 0.1 **Steps**:
-
+-   **Steps**:
 -   **Definition of done**:
+    -   the following code should run:
 
-## 3.2 Allow users to explore existing bindings
+``` r
+  # Works when type function is masked
+  string <- rlang::string
+  expect_equal(
+    Array$create("abc", type = string()),
+    arrow::string()
+  )
+
+  # Works when with non-Arrow function that returns an Arrow type
+  # when the non-Arrow function has the same name as a base R function...
+  str <- arrow::string
+  expect_equal(
+    Array$create("abc", type = str()),
+    arrow::string()
+  )
+
+  # ... and when it has the same name as an Arrow function
+  type <- arrow::string
+  expect_equal(
+    Array$create("abc", type = type()),
+    arrow::string()
+  )
+
+  # Works with local variable whose value is an Arrow type
+  type <- arrow::string()
+  expect_equal(
+    Array$create("abc", type = type),
+    arrow::string()
+  )
+```
+
+## 2.7 Document all of the above in user / developer facing documentation
+
+## 2.8 Write a blog post
+
+# 3 Extension
+
+## 3.1 Allow users to explore existing bindings
 
 -   and the differences between them and the functions they aim to
     replace
@@ -240,7 +299,7 @@ nycflights13::flights %>%
     Arrow and maybe explore the differences between the `fun` binding
     and `lubridate::fun`.
 
-## 3.3 Guard `build_expr` against non-expression inputs longer than 1
+## 3.2 Guard `build_expr` against non-expression inputs longer than 1
 
 -   Jira:
     [ARROW-14855](https://issues.apache.org/jira/browse/ARROW-14855)
