@@ -151,13 +151,13 @@ tibble::tibble(my_string = "1234") %>%
     -   generate a skeleton / minimal documentation automatically
     -   allow adjustment of the minimal documentation where needed
     -   decide on how the user will access the documentation
-    -   might involve writing custom roxygen2 tags and roclets
-    -   **follow-up step**: document all bindings
+    -   might involve writing custom {roxygen2} tags and roclets
+    -   **follow-up ticket / step**: document all bindings
 -   **Estimated duration**
     -   given the rough documentation on how to define custom roxygen2
         extensions, I anticipate this will take extra time due to the
         need to understand the {roxygen2} source code.
-    -   rough estimate: 3-4 weeks
+    -   rough estimate: 3-4 weeks (without documenting all the bindings)
 -   **Definition of done**: bindings can be documented based on the
     function they emulate
 
@@ -292,6 +292,9 @@ nycflights13::flights %>%
 ## 2.8 Write a blog post
 
 # 3 Stretch goals
+
+I haven’t detailed these, as that could be done depending on the
+progress of the work on the *core* tickets.
 
 ## 3.1 Allow users to explore existing bindings
 
