@@ -201,7 +201,7 @@ register_binding("difftime", function(time1,
     ...
 }
 
-# while this one would get lost in the exception handling
+# while this one would get lost in the condition handling
 register_binding("difftime", function(time1,
                                       time2,
                                       tz,
