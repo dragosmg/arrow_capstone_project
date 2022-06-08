@@ -17,9 +17,6 @@ a dplyr pipeline. Users will also have access to a minimal documentation
 for each binding, point to the function the binding is emulating and
 highlighting possible differences.
 
-by: allowing them to use namespacing, supply their own function, access
-documentation for existing bindings, improved error messaging.
-
 ## Scope
 
 Jira tickets:
@@ -135,8 +132,13 @@ tibble::tibble(my_string = "1234") %>%
         binding and the original function (e.g. different default
         values, slight differences in implementation, etc.)
 -   **Steps**:
--   **Estimated duration**:
--   **Definition of done**:
+    -   extend the classes of Arrow errors
+    -   update the behaviour: allow the printing of error messages when
+        they do not contain `"not supported.*Arrow"`
+-   **Estimated duration**: 1-2 weeks
+-   **Definition of done**: messages other than `"not supported.*Arrow"`
+    are classified as `arrow-try-error` (or a different, related class)
+    and surfaced to inform the user
 
 5.  [ARROW-15016](https://issues.apache.org/jira/browse/ARROW-15016):
     `show_query()` for `arrow_dplyr_query`
@@ -180,3 +182,7 @@ nycflights13::flights %>%
 
 -   This is a bit of an extra ticket, not strictly related to the ones
     above.
+
+9.  Document all of the above in user / developer facing documentation.
+
+10. Write a blog post.

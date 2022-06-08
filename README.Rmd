@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 
 Implementing the changes below would considerably improve user and developer experience. They will remove ambiguity when calling a binding (by allowing users to use the `pkg::` prefix), they will make it easier to figure out what is going on when things go wrong (by adding a way to inspect the Arrow query being generated in a dplyr pipeline, and by allowing more granular condition handling/ messaging). Moreover, user will be able to include their own functions, operating on Arrow data, in a dplyr pipeline. Users will also have access to a minimal documentation for each binding, point to the function the binding is emulating and highlighting possible differences. 
 
-by: allowing them to use namespacing, supply their own function, access documentation for existing bindings, improved error messaging. 
-
 ## Scope
 
 Jira tickets:
@@ -95,8 +93,10 @@ tibble::tibble(my_string = "1234") %>%
     * we could opt for custom error messages when an argument is not supported, for example
     * we could also warn when there is a difference between the binding and the original function (e.g. different default values, slight differences in implementation, etc.)
   * **Steps**:
-  * **Estimated duration**:
-  * **Definition of done**:
+    * extend the classes of Arrow errors
+    * update the behaviour: allow the printing of error messages when they do not contain `"not supported.*Arrow"`
+  * **Estimated duration**: 1-2 weeks
+  * **Definition of done**: messages other than `"not supported.*Arrow"` are classified as `arrow-try-error` (or a different, related class) and surfaced to inform the user
 
 5. [ARROW-15016](https://issues.apache.org/jira/browse/ARROW-15016): `show_query()` for `arrow_dplyr_query`
   * this would be useful for debugging / allowing users to inspect a query plan 
@@ -124,3 +124,7 @@ nycflights13::flights %>%
 
 8. [ARROW-14855](https://issues.apache.org/jira/browse/ARROW-14855): `build_expr()` should check that non-expression inputs have `vec_size() == 1L`
   * This is a bit of an extra ticket, not strictly related to the ones above. 
+  
+9. Document all of the above in user / developer facing documentation. 
+
+10. Write a blog post.
