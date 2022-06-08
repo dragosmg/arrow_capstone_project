@@ -143,7 +143,7 @@ tibble::tibble(my_string = "1234") %>%
     said documentation?
 -   As a *stretch* we might include the package version of the function
     we’re linking to. Functions / packages are not static and
-    convergence between the original function and the arrow binding
+    convergence between the original function and the {arrow} binding
     might drift over time.
 -   **Steps**:
     -   create a (manual) prototype of what a documented binding would
@@ -153,6 +153,10 @@ tibble::tibble(my_string = "1234") %>%
     -   decide on how the user will access the documentation
     -   might involve writing custom {roxygen2} tags and roclets
     -   **follow-up ticket / step**: document all bindings
+-   Possible breakdown:
+    -   scaffolding for documenting a binding
+    -   extend to cover package version
+    -   document all bindings
 -   **Estimated duration**
     -   given the rough documentation on how to define custom roxygen2
         extensions, I anticipate this will take extra time due to the

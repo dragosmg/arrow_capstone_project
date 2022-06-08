@@ -86,7 +86,7 @@ tibble::tibble(my_string = "1234") %>%
   * Likely depends on [Allow bindings to use the `pkg::` prefixes] (removing any ambiguity with regards to the function we're emulating)
   * This will allow us to document differences in behaviours, unsupported arguments, etc.
   * I think this could be really useful for users. How would they access said documentation?
-  * As a *stretch* we might include the package version of the function we're linking to. Functions / packages are not static and convergence between the original function and the arrow binding might drift over time.
+  * As a *stretch* we might include the package version of the function we're linking to. Functions / packages are not static and convergence between the original function and the {arrow} binding might drift over time.
   * **Steps**:
     * create a (manual) prototype of what a documented binding would look like
     * generate a skeleton / minimal documentation automatically
@@ -94,6 +94,10 @@ tibble::tibble(my_string = "1234") %>%
     * decide on how the user will access the documentation
     * might involve writing custom {roxygen2} tags and roclets
     * **follow-up ticket / step**: document all bindings
+  * Possible breakdown:
+    * scaffolding for documenting a binding
+    * extend to cover package version
+    * document all bindings
   * **Estimated duration**
     * given the rough documentation on how to define custom roxygen2 extensions, I anticipate this will take extra time due to the need to understand the {roxygen2} source code.
     * rough estimate: 3-4 weeks (without documenting all the bindings)
