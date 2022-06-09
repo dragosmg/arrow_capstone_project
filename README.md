@@ -34,12 +34,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-Implementing the changes below would considerably improve user and
+Implementing the changes below would considerably improve both user and
 developer experience. They will remove ambiguity when calling a binding
 (by allowing users to use the `pkg::` prefix), they will make it easier
 to figure out what is going on when things go wrong (by adding a way to
 inspect the Arrow query being generated in a dplyr pipeline, and by
-allowing more granular condition handling/ messaging). Moreover, user
+allowing more granular condition handling/ messaging). Moreover, users
 will be able to include their own functions (using regular R syntax),
 operating on Arrow data, in a dplyr pipeline. Users will also have
 access to a minimal documentation for each binding, point to the
@@ -334,3 +334,4 @@ progress of the work on the *core* tickets.
     [ARROW-16444](https://issues.apache.org/jira/projects/ARROW/issues/ARROW-16444)
 -   related to [Allow users to `arrow_eval` a
     function](#22-allow-users-to-arrow_eval-a-function)
+-   I think this issue might be on Dewey’s list
