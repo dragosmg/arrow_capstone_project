@@ -170,7 +170,8 @@ tibble::tibble(my_string = "1234") %>%
         need to understand the {roxygen2} source code.
     -   rough estimate: 3-4 weeks (without documenting all the bindings)
 -   **Definition of done**: bindings can be documented based on the
-    function they emulate
+    function they emulate. At minimum a reference to the main function:
+    “This binding should work just like X from package Y”.
 
 ## 2.4 More specific handling for known errors in `arrow_eval`
 
