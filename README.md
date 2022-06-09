@@ -54,13 +54,17 @@ function the binding is emulating and highlighting possible differences.
 -   users will be able to use either the function name (`fun`) or the
     namespace-qualified (`pkg::fun`) version when calling Arrow bindings
 -   when defining a binding we should be using the `pkg::fun` notation
+-   in connection to [Allow users to `arrow_eval` a
+    function](#22-allow-users-to-arrow_eval-a-function) it might mean
+    the non-namespace-qualified version of a binding could be
+    overwritten by a user deciding to register another `fun` binding)
 -   **Linked to**: [Document a binding (semi)
     automatically](#23-document-a-binding-semi-automatically)
 -   **Steps**:
     -   Register each binding twice in the `nse_funcs` function registry
         (once as `fun()` and once as `pkg::fun()`).
-    -   Sort out edge, e.g for some of the unary functions (which are
-        defined as a list which is used for several purposes)
+    -   Sort out edge cases, e.g for some of the unary functions (which
+        are defined as a list which is used for several purposes)
     -   document (where?) that going forward we should be using
         `pkg::fun` when defining a binding, which will register 2 copies
         of the same binding.
@@ -108,6 +112,7 @@ function the binding is emulating and highlighting possible differences.
         attaching {arrow}
     -   could we make use of {rlang}’s top and bottom of data mask?
     -   investigate if `rlang::inject()` could be used here
+    -   investigate if a simple injection with `!!` works
 -   **Steps**:
     -   Translate the user-defined function with the help of bindings
     -   A second step might be accessing / registering these functions
