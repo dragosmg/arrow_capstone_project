@@ -30,11 +30,14 @@ flights %>%
 ```
 
 Questions:
+
 * What was the busiest week for JFK Airport? Separate for departures and arrivals.
 
 We need to build some new variables: 
+
 * several timestampt variables:
   * `depart_time`: departure time
+  * 
 
 Let's investigate the `dep_time`, data set description informs us the format should be HHMM or HMM, and the timezone is local. 
 
@@ -116,7 +119,7 @@ flights2 <- flights %>%
     dep_time = as.character(dep_time),
     dep_time_length = nchar(dep_time)
   ) %>% 
-  filter(dep_time_length >= 3) %>% 
+  filter(dep_time_length >= 3 | is.na(dep_time)) %>% 
   mutate(dep_time_sep = sep_hour_minute(dep_time)) %>% 
   collect()
 flights2
@@ -139,15 +142,40 @@ We can continue by identifying the week for each flight. We can do that with the
 ```{r}
 a <- flights_date_time %>% 
   arrow_table() %>% 
-  mutate(week = floor_date(depart_time, unit = "week")) %>% 
-  count(week) %>% 
+  mutate(depart_week = floor_date(depart_time, unit = "week", week_start = 1)) %>% 
+  count(depart_week) %>% 
+  arrange(depart_week) %>% 
   collect()
 a
 ```
 
+
 ```{r}
-ggplot(a, aes(week, n)) +
+ggplot(a, aes(depart_week, n)) +
   geom_col() +
   theme_minimal()
+```
+
+```{r}
+my_awesome_function <- function(dataframe, var) {
+  dataframe %>% 
+    mutate(
+      x = as.character({{ var }}),
+      time_length = nchar(x)
+    ) %>% 
+    filter(time_length >= 3 | is.na(x)) %>% 
+    mutate(
+      time_sep = sep_hour_minute(x),
+      time_string = stringr::str_c(year, month, day, time_sep, sep = "-"),
+      time = ymd_hm(time_string)
+    )
+}
+```
+
+```{r}
+flights %>% 
+  arrow_table() %>%
+  my_awesome_function(dep_time) %>% 
+  collect()
 ```
 
