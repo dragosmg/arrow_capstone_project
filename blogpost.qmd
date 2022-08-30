@@ -1,6 +1,8 @@
 ---
 title: "blogpost"
-format: html
+format: 
+  html: 
+    theme: sandstone
 editor: visual
 ---
 
@@ -9,8 +11,9 @@ editor: visual
 Tell the audience what this post is about.
 
 
-```{r}
+```{r packages}
 #| warning: false
+#| message: false
 library(arrow)
 library(nycflights13)
 library(dplyr)
