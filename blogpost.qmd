@@ -1,0 +1,140 @@
+---
+title: "blogpost"
+format: html
+editor: visual
+---
+
+## Intro
+
+Tell the audience what this post is about.
+
+
+```{r}
+library(arrow)
+library(nycflights13)
+library(dplyr)
+```
+
+
+## Evaluating user-defined functions in Arrow pipelines
+
+User-defined functions are automatically translated if all the underlying bindings are known.
+
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  glimpse()
+```
+
+Questions:
+* What was the busiest week for JFK Airport? Separate for departures and arrivals.
+
+We need to build some new variables: 
+* several timestampt variables:
+  * `depart_time`: departure time
+
+Let's investigate the `dep_time`, data set description informs us the format should be HHMM or HMM, and the timezone is local. 
+
+We notice the departure and arrival times are written in a 3 or 4-digit formats, namely `5:17` is written as 
+`517` while `22:09` appears as `2209`. It would be easier to work with them in a format where the digits for hours and minutes are separated by `":"` or any other separator for that matter. Let's create the separated time
+variable. Let's first make sure all values `dep_time` are 3 or 4 digits or `NA`.
+
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  mutate(
+    dep_time_length = nchar(as.character(dep_time)),
+    .keep = "used"
+  ) %>% 
+  count(dep_time_length) %>% 
+  collect()
+```
+
+Let's investigate the `dep_times` shorter than 3:
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  mutate(
+    dep_time_length = nchar(as.character(dep_time)),
+    .keep = "used"
+  ) %>% 
+  filter(dep_time_length < 3) %>% 
+  collect()
+```
+
+We notice they are quite ambigous and it would be difficult to figure out what hour and minute they refer to. So, the best course of action would be to exclude them together with the missing values from the analysis.
+
+Let's now insert a `":"` separator in the correct position inside `dep_time` and create `dep_time_sep`:
+
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  mutate(
+    dep_time = as.character(dep_time),
+    dep_time_length = nchar(dep_time),
+    .keep = "used"
+  ) %>% 
+  filter(dep_time_length >= 3) %>% 
+  mutate(dep_hour = if_else(
+      dep_time_length == 3,
+      str_sub(dep_time, start = 1, end = 1),
+      str_sub(dep_time, start = 1, end = 2)
+    ),
+    dep_minute = str_sub(dep_time, start = -2),
+    dep_time_sep = str_c(dep_hour, dep_minute, sep = ":")
+  ) %>% 
+  collect()
+```
+
+If we want to replicate the separation of hour and minute for the other variables (`sched_dep_time`, `arr_time`, and `sched_arr_time`), we would have quite a bit of duplicated code. Let's try and write a function.
+
+```{r}
+sep_hour_minute <- function(x) {
+  x <- as.character(x)
+  hour <- dplyr::if_else(
+    base::nchar(x) == 3,
+    stringr::str_sub(dep_time, start = 1, end = 1),
+    stringr::str_sub(dep_time, start = 1, end = 2)
+  )
+  minute <- stringr::str_sub(dep_time, start = -2)
+  result <- stringr::str_c(dep_hour, dep_minute, sep = ":")
+  result
+}
+```
+
+NB: I have stopped here as the function above has revealed some issues with the explicit approach.
+
+Now let's re-write the previous chunk using this function:
+
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  mutate(
+    dep_time = as.character(dep_time),
+    dep_time_length = nchar(dep_time),
+    .keep = "used"
+  ) %>% 
+  filter(dep_time_length >= 3) %>% 
+  mutate(dep_time_sep = sep_hour_minute(dep_time)) %>% 
+  collect()
+```
+
+
+```{r}
+flights %>% 
+  arrow_table() %>% 
+  mutate(
+    depart_time_stringr = 
+      stringr::str_c(year, "-", month, "-", day)
+  ) %>% 
+  collect()
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
