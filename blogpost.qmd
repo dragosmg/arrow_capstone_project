@@ -10,7 +10,7 @@ Tell the audience what this post is about.
 
 
 ```{r}
-#| echo: false
+#| warning: false
 library(arrow)
 library(nycflights13)
 library(dplyr)
@@ -95,7 +95,7 @@ flights %>%
 If we want to replicate the separation of hour and minute for the other variables (`sched_dep_time`, `arr_time`, and `sched_arr_time`), we would have quite a bit of duplicated code. Let's try and write a function.
 
 ```{r}
-sep_hour_minute <- function(x) {
+sep_hour_minute <- function(x, sep = ":") {
   x <- as.character(x)
   hour <- dplyr::if_else(
     base::nchar(x) == 3,
@@ -103,7 +103,7 @@ sep_hour_minute <- function(x) {
     stringr::str_sub(x, start = 1, end = 2)
   )
   minute <- stringr::str_sub(x, start = -2)
-  result <- stringr::str_c(hour, minute, sep = ":")
+  result <- stringr::str_c(hour, minute, sep = sep)
   result
 }
 ```
@@ -176,7 +176,10 @@ build_timestamp <- function(dataframe, var) {
 ```{r}
 flights %>% 
   arrow_table() %>%
-  build_timestamp(dep_time) %>% 
+  build_timestamp(dep_time) %>%
+  # TODO build_timestamp to generate meaninful names
+  select(time, week, everything()) %>% 
   collect()
 ```
 
+Another option would have been to separate into `hours` and `minutes` and build a timestamp using `lubridate::make_datetime()`. 
