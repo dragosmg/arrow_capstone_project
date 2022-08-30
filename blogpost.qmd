@@ -93,11 +93,11 @@ sep_hour_minute <- function(x) {
   x <- as.character(x)
   hour <- dplyr::if_else(
     base::nchar(x) == 3,
-    stringr::str_sub(dep_time, start = 1, end = 1),
-    stringr::str_sub(dep_time, start = 1, end = 2)
+    stringr::str_sub(x, start = 1, end = 1),
+    stringr::str_sub(x, start = 1, end = 2)
   )
-  minute <- stringr::str_sub(dep_time, start = -2)
-  result <- stringr::str_c(dep_hour, dep_minute, sep = ":")
+  minute <- stringr::str_sub(x, start = -2)
+  result <- stringr::str_c(hour, minute, sep = ":")
   result
 }
 ```
