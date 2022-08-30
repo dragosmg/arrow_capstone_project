@@ -157,7 +157,7 @@ ggplot(a, aes(depart_week, n)) +
 ```
 
 ```{r}
-my_awesome_function <- function(dataframe, var) {
+build_timestamp <- function(dataframe, var) {
   dataframe %>% 
     mutate(
       x = as.character({{ var }}),
@@ -167,7 +167,8 @@ my_awesome_function <- function(dataframe, var) {
     mutate(
       time_sep = sep_hour_minute(x),
       time_string = stringr::str_c(year, month, day, time_sep, sep = "-"),
-      time = ymd_hm(time_string)
+      time = ymd_hm(time_string),
+      week = floor_date(time, unit = "week", week_start = 1)
     )
 }
 ```
@@ -175,7 +176,7 @@ my_awesome_function <- function(dataframe, var) {
 ```{r}
 flights %>% 
   arrow_table() %>%
-  my_awesome_function(dep_time) %>% 
+  build_timestamp(dep_time) %>% 
   collect()
 ```
 
